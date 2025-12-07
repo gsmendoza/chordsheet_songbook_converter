@@ -11,3 +11,5 @@ gem "rake", "~> 13.0"
 gem "standardrb", "~> 1.0"
 
 gem "lefthook", "~> 2.0"
+
+gem "rspec", "~> 3.13"
