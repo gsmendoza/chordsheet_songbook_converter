@@ -6,6 +6,10 @@ module ChordsheetSongbookConverter
       @text = text
     end
 
+    def formatted_text
+      "<#{text}>"
+    end
+
     def to_s
       @text
     end

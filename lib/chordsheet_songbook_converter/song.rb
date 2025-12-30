@@ -13,7 +13,7 @@ module ChordsheetSongbookConverter
       stanzas.each do |stanza|
         content = nil
         if stanza.chord_lines.any?
-          content = stanza.chord_lines.map { |l| "<#{l.text}>" }.join
+          content = stanza.chord_lines.map { |l| l.formatted_text }.join
         end
 
         data["chords"][stanza.cleaned_name] = content
