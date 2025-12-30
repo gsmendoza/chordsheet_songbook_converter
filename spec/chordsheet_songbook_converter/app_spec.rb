@@ -39,84 +39,84 @@ RSpec.describe ChordsheetSongbookConverter::App do
           expect(File.read(output_path)).to eq("---\nchords: {}\nlyrics: []\n")
         end
       end
+    end
 
-      describe "concerning the input path" do
-        context "when the input is an empty file" do
-          let(:input_content) { "" }
+    describe "concerning the input path" do
+      context "when the input is an empty file" do
+        let(:input_content) { "" }
 
-          it "generates an empty songbook file" do
-            call_app
+        it "generates an empty songbook file" do
+          call_app
 
-            expect(File.read(output_path)).to eq("---\nchords: {}\nlyrics: []\n")
-          end
+          expect(File.read(output_path)).to eq("---\nchords: {}\nlyrics: []\n")
+        end
+      end
+
+      context "when the input is a file has a line that is not a stanza" do
+        let(:input_content) { "X" }
+
+        it "generates an empty songbook file" do
+          call_app
+
+          expect(File.read(output_path)).to eq("---\nchords: {}\nlyrics: []\n")
+        end
+      end
+
+      context "when the input is a file with a single empty stanza" do
+        let(:input_content) do
+          <<~STANZA
+            &
+            [Intro]
+          STANZA
         end
 
-        context "when the input is a file has a line that is not a stanza" do
-          let(:input_content) { "X" }
+        it "generates a songbook file with that stanza" do
+          call_app
 
-          it "generates an empty songbook file" do
-            call_app
+          songbook = YAML.load_file(output_path)
 
-            expect(File.read(output_path)).to eq("---\nchords: {}\nlyrics: []\n")
-          end
+          expect(songbook["chords"].keys).to eq(["Intro"])
+          expect(songbook["chords"]["Intro"]).to be_nil
+
+          expect(songbook["lyrics"].size).to eq(1)
+          expect(songbook["lyrics"][0]).to be_a(Hash)
+          expect(songbook["lyrics"][0].keys).to eq(["Intro"])
+          expect(songbook["lyrics"][0]["Intro"]).to be_nil
+        end
+      end
+
+      context "when the input is a file with a single stanza with a single chord line" do
+        let(:input_content) do
+          <<~STANZA
+            &
+            [Intro]
+            Aadd9/F#
+          STANZA
         end
 
-        context "when the input is a file with a single empty stanza" do
-          let(:input_content) do
-            <<~STANZA
-              &
-              [Intro]
-            STANZA
-          end
+        it "generates an songbook file with that chord line" do
+          call_app
 
-          it "generates a songbook file with that stanza" do
-            call_app
+          songbook = YAML.load_file(output_path)
 
-            songbook = YAML.load_file(output_path)
+          expect(songbook["chords"].keys).to eq(["Intro"])
+          expect(songbook["chords"]["Intro"]).to eq("<Aadd9/F#>")
 
-            expect(songbook["chords"].keys).to eq(["Intro"])
-            expect(songbook["chords"]["Intro"]).to be_nil
-
-            expect(songbook["lyrics"].size).to eq(1)
-            expect(songbook["lyrics"][0]).to be_a(Hash)
-            expect(songbook["lyrics"][0].keys).to eq(["Intro"])
-            expect(songbook["lyrics"][0]["Intro"]).to be_nil
-          end
+          expect(songbook["lyrics"].size).to eq(1)
+          expect(songbook["lyrics"][0]).to be_a(Hash)
+          expect(songbook["lyrics"][0].keys).to eq(["Intro"])
+          expect(songbook["lyrics"][0]["Intro"]).to be_nil
         end
-
-        context "when the input is a file with a single stanza with a single chord line" do
-          let(:input_content) do
-            <<~STANZA
-              &
-              [Intro]
-              Aadd9/F#
-            STANZA
-          end
-
-          it "generates an songbook file with that chord line" do
-            call_app
-
-            songbook = YAML.load_file(output_path)
-
-            expect(songbook["chords"].keys).to eq(["Intro"])
-            expect(songbook["chords"]["Intro"]).to eq("<Aadd9/F#>")
-
-            expect(songbook["lyrics"].size).to eq(1)
-            expect(songbook["lyrics"][0]).to be_a(Hash)
-            expect(songbook["lyrics"][0].keys).to eq(["Intro"])
-            expect(songbook["lyrics"][0]["Intro"]).to be_nil
-          end
-        end
-
-        # context "when provided a complete song" do
-        #   let(:input_content) { File.read("spec/fixtures/Jack O’Connell, Brian Dunphy & Darren Holden - Rocky Road to Dublin.txt") }
-
-        #   it "matches the expected output" do
-        #     call_app
-
-        #     expect(File.read(output_path)).to eq(File.read("spec/fixtures/Jack O’Connell, Brian Dunphy & Darren Holden - Rocky Road to Dublin.csv"))
-        #   end
       end
     end
+
+    # context "when provided a complete song" do
+    #   let(:input_content) { File.read("spec/fixtures/Jack O’Connell, Brian Dunphy & Darren Holden - Rocky Road to Dublin.txt") }
+
+    #   it "matches the expected output" do
+    #     call_app
+
+    #     expect(File.read(output_path)).to eq(File.read("spec/fixtures/Jack O’Connell, Brian Dunphy & Darren Holden - Rocky Road to Dublin.csv"))
+    #   end
   end
 end
