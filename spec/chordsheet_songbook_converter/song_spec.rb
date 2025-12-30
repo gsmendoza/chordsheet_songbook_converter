@@ -69,5 +69,20 @@ RSpec.describe ChordsheetSongbookConverter::Song do
         expect(songbook["lyrics"]).to eq([{"Intro" => nil}, {"Verse 1" => nil}])
       end
     end
+
+    context "when the song has a stanza with a chord line and a lyric line" do
+      before do
+        stanza = ChordsheetSongbookConverter::Stanza.new("[Verse 1]")
+        stanza.chord_lines << ChordsheetSongbookConverter::ChordLine.new("Aadd9/F#")
+        stanza.lyric_lines << ChordsheetSongbookConverter::LyricLine.new("Pangarap ko'y")
+
+        song.stanzas << stanza
+      end
+
+      it "generates a song with both chord and lyric lines" do
+        expect(songbook["chords"]["Verse 1"]).to eq("<Aadd9/F#>")
+        expect(songbook["lyrics"]).to eq([{"Verse 1" => "Pangarap ko'y"}])
+      end
+    end
   end
 end

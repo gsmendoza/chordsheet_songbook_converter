@@ -12,13 +12,18 @@ module ChordsheetSongbookConverter
       data = {"chords" => {}, "lyrics" => []}
 
       stanzas.each do |stanza|
-        content = nil
+        chord_content = nil
         if stanza.chord_lines.any?
-          content = stanza.chord_lines.map { |l| l.formatted_text }.join
+          chord_content = stanza.chord_lines.map { |l| l.formatted_text }.join
         end
 
-        data["chords"][stanza.cleaned_name] = content
-        data["lyrics"] << {stanza.cleaned_name => nil}
+        lyric_content = nil
+        if stanza.lyric_lines.any?
+          lyric_content = stanza.lyric_lines.map(&:text).join("\n")
+        end
+
+        data["chords"][stanza.cleaned_name] = chord_content
+        data["lyrics"] << {stanza.cleaned_name => lyric_content}
       end
 
       data
