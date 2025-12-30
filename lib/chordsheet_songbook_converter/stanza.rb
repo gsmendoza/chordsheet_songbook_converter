@@ -1,10 +1,14 @@
 module ChordsheetSongbookConverter
   class Stanza
-    attr_reader :name, :lines
+    attr_reader :name, :chord_lines
 
     def initialize(name)
       @name = name
-      @lines = []
+      @chord_lines = []
+    end
+
+    def cleaned_name
+      @name[1..-2]
     end
   end
 end

@@ -1,5 +1,7 @@
 module ChordsheetSongbookConverter
-  class Line
+  class InputLine
+    attr_reader :text
+
     def initialize(input:, text:)
       @input = input
       @text = text.strip
@@ -7,14 +9,6 @@ module ChordsheetSongbookConverter
 
     def stanza_header?
       @text.start_with?("[") && @text.end_with?("]")
-    end
-
-    def cleaned_text
-      if stanza_header?
-        @text[1..-2]
-      else
-        @text
-      end
     end
 
     def before_first_stanza?

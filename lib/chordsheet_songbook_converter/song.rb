@@ -12,12 +12,12 @@ module ChordsheetSongbookConverter
       data = {"chords" => {}, "lyrics" => []}
       stanzas.each do |stanza|
         content = nil
-        if stanza.lines.any?
-          content = stanza.lines.map { |l| "<#{l}>" }.join
+        if stanza.chord_lines.any?
+          content = stanza.chord_lines.map { |l| "<#{l.text}>" }.join
         end
 
-        data["chords"][stanza.name] = content
-        data["lyrics"] << {stanza.name => nil}
+        data["chords"][stanza.cleaned_name] = content
+        data["lyrics"] << {stanza.cleaned_name => nil}
       end
       data.to_yaml
     end
