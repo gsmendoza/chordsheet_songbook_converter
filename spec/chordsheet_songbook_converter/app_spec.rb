@@ -1,4 +1,5 @@
 require "spec_helper"
+require "yaml"
 
 RSpec.describe ChordsheetSongbookConverter::App do
   describe "#call" do
@@ -23,7 +24,7 @@ RSpec.describe ChordsheetSongbookConverter::App do
         it "creates the file" do
           call_app
 
-          expect(File.read(output_path)).to eq("")
+          expect(File.read(output_path)).to eq("---\nchords: {}\nlyrics: []\n")
         end
       end
 
@@ -35,7 +36,7 @@ RSpec.describe ChordsheetSongbookConverter::App do
         it "updates the file" do
           call_app
 
-          expect(File.read(output_path)).to eq("")
+          expect(File.read(output_path)).to eq("---\nchords: {}\nlyrics: []\n")
         end
       end
 
@@ -43,20 +44,43 @@ RSpec.describe ChordsheetSongbookConverter::App do
         context "when the input is an empty file" do
           let(:input_content) { "" }
 
-          it "generates an empty Anki import file" do
+          it "generates an empty songbook file" do
             call_app
 
-            expect(File.read(output_path)).to eq("")
+            expect(File.read(output_path)).to eq("---\nchords: {}\nlyrics: []\n")
           end
         end
 
         context "when the input is a file has a line that is not a stanza" do
           let(:input_content) { "X" }
 
-          it "generates an empty Anki import file" do
+          it "generates an empty songbook file" do
             call_app
 
-            expect(File.read(output_path)).to eq("")
+            expect(File.read(output_path)).to eq("---\nchords: {}\nlyrics: []\n")
+          end
+        end
+
+        context "when the input is a file with a single empty stanza" do
+          let(:input_content) do
+            <<~STANZA
+              &
+              [Intro]
+            STANZA
+          end
+
+          it "generates a songbook file with that stanza" do
+            call_app
+
+            songbook = YAML.load_file(output_path)
+
+            expect(songbook["chords"].keys).to eq(["Intro"])
+            expect(songbook["chords"]["Intro"]).to be_nil
+
+            expect(songbook["lyrics"].size).to eq(1)
+            expect(songbook["lyrics"][0]).to be_a(Hash)
+            expect(songbook["lyrics"][0].keys).to eq(["Intro"])
+            expect(songbook["lyrics"][0]["Intro"]).to be_nil
           end
         end
 
@@ -69,7 +93,7 @@ RSpec.describe ChordsheetSongbookConverter::App do
         #       STANZA
         #     end
 
-        #     it "generates an Anki import file with a single card" do
+        #     it "generates an songbook file with a single card" do
         #       call_app
 
         #       expect(File.read(output_path)).to eq(%("Sinners - Rocky Road to Dublin\n0. First Line","1. [Intro]\n1. ...         Then off to reap the corn,"\n))

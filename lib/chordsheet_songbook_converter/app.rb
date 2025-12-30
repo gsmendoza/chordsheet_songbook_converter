@@ -9,17 +9,11 @@ module ChordsheetSongbookConverter
     end
 
     def call
-      # content = File.read(@input_path)
+      content = File.read(@input_path)
       output = Output.new(@output_path)
+      song = Input.new(content).to_song
 
-      # TODO: update this later. Don't touch for now.
-      # Input.new(content).to_song.stanzas.each do |stanza|
-      #   stanza.lines.each do |line|
-      #     output.cards << line.to_card
-      #   end
-      # end
-
-      output.write
+      output.write(song)
 
       output.path
     end
