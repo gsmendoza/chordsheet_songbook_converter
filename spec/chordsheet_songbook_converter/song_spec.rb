@@ -23,8 +23,8 @@ RSpec.describe ChordsheetSongbookConverter::Song do
       end
 
       it "generates a songbook with that stanza" do
-        expect(songbook["chords"]).to eq({"Intro" => nil})
-        expect(songbook["lyrics"]).to eq([{"Intro" => nil}])
+        expect(songbook["chords"]).to eq({"Intro" => ""})
+        expect(songbook["lyrics"]).to eq([{"Intro" => ""}])
       end
     end
 
@@ -38,7 +38,7 @@ RSpec.describe ChordsheetSongbookConverter::Song do
 
       it "generates a songbook with that chord line" do
         expect(songbook["chords"]).to eq({"Intro" => "<Aadd9/F#>"})
-        expect(songbook["lyrics"]).to eq([{"Intro" => nil}])
+        expect(songbook["lyrics"]).to eq([{"Intro" => ""}])
       end
     end
 
@@ -66,7 +66,7 @@ RSpec.describe ChordsheetSongbookConverter::Song do
 
       it "generates a songbook with those stanzas" do
         expect(songbook["chords"].keys).to eq(["Intro", "Verse 1"])
-        expect(songbook["lyrics"]).to eq([{"Intro" => nil}, {"Verse 1" => nil}])
+        expect(songbook["lyrics"]).to eq([{"Intro" => ""}, {"Verse 1" => ""}])
       end
     end
 
