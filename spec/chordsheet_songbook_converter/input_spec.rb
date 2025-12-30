@@ -126,5 +126,19 @@ RSpec.describe ChordsheetSongbookConverter::Input do
         expect(stanza.lyric_lines.map(&:text)).to eq(["Pangarap ko'y", "Makita kang"])
       end
     end
+
+    context "when the input has multiple repeated stanzas" do
+      let(:input_content) do
+        <<~STANZA
+          [Bridge]
+          [Bridge]
+          [Bridge]
+        STANZA
+      end
+
+      it "adds an index to the following stanzas" do
+        expect(song.stanzas.map(&:cleaned_name)).to eq(["Bridge", "Bridge 2", "Bridge 3"])
+      end
+    end
   end
 end

@@ -20,6 +20,7 @@ module ChordsheetSongbookConverter
     def to_song
       song = Song.new
       current_stanza = nil
+      stanza_names_count = Hash.new(0)
 
       @content.each_line do |line_text|
         line = InputLine.new(input: self, text: line_text)
@@ -28,7 +29,18 @@ module ChordsheetSongbookConverter
 
         if line.stanza_header?
           @seen_stanza_header = true
-          current_stanza = Stanza.new(line.text)
+
+          stanza_names_count[line.text] += 1
+
+          current_stanza_name =
+            if stanza_names_count[line.text] > 1
+              line.text.sub("]", " #{stanza_names_count[line.text]}]")
+            else
+              line.text
+            end
+
+          current_stanza = Stanza.new(current_stanza_name)
+
           song.stanzas << current_stanza
         else
           raise MissingCurrentStanza if current_stanza.nil?
