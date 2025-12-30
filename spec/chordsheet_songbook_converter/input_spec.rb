@@ -75,5 +75,18 @@ RSpec.describe ChordsheetSongbookConverter::Input do
         expect(stanza.chord_lines.map(&:text)).to eq(["Aadd9/F# G6 Dsus2 Aadd9/F#", "G6"])
       end
     end
+
+    context "when the input has multiple stanzas" do
+      let(:input_content) do
+        <<~STANZA
+          [Intro]
+          [Verse 1]
+        STANZA
+      end
+
+      it "generates a song with those stanzas" do
+        expect(song.stanzas.map(&:cleaned_name)).to eq(["Intro", "Verse 1"])
+      end
+    end
   end
 end
