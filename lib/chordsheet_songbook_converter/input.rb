@@ -5,6 +5,8 @@ require_relative "stanza"
 
 module ChordsheetSongbookConverter
   class Input
+    class MissingCurrentStanza < StandardError; end
+
     def initialize(content)
       @content = content
       @seen_stanza_header = false
@@ -27,7 +29,9 @@ module ChordsheetSongbookConverter
           @seen_stanza_header = true
           current_stanza = Stanza.new(line.text)
           song.stanzas << current_stanza
-        elsif current_stanza
+        else
+          raise MissingCurrentStanza if current_stanza.nil?
+
           current_stanza.chord_lines << ChordLine.new(line.text)
         end
       end
