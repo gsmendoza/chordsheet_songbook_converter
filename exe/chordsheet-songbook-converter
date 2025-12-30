@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require "chordsheet_songbook_converter"
+
+input_path = ARGV[0]
+if input_path.nil?
+  puts "Usage: chordsheet-songbook-converter <input_path> [output_path]"
+  exit 1
+end
+
+output_path = ARGV[1] || input_path.sub(/\.[^.]+$/, ".yml")
+
+ChordsheetSongbookConverter::App.new(input_path: input_path, output_path: output_path).call
