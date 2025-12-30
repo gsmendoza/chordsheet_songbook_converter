@@ -1,27 +1,28 @@
-require_relative "song"
-require_relative "stanza"
+require_relative "line"
 
 module ChordsheetSongbookConverter
   class Input
     def initialize(content)
       @content = content
+      @seen_stanza_header = false
+    end
+
+    def seen_stanza_header?
+      @seen_stanza_header
     end
 
     def to_song
-      song = Song.new
-      current_stanza = nil
+      song = {"chords" => {}, "lyrics" => []}
 
-      @content.each_line do |line|
-        line = line.strip
-        next if line.empty?
-        next if line == "&"
+      @content.each_line do |line_text|
+        line = Line.new(input: self, text: line_text)
 
-        if line.start_with?("[") && line.end_with?("]")
-          name = line[1..-2]
-          current_stanza = Stanza.new(name)
-          song.stanzas << current_stanza
-        elsif current_stanza
-          current_stanza.lines << line
+        next if line.before_first_stanza?
+
+        if line.stanza_header?
+          @seen_stanza_header = true
+          song["chords"][line.cleaned_text] = nil
+          song["lyrics"] << {line.cleaned_text => nil}
         end
       end
 

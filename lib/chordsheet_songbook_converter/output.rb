@@ -9,17 +9,7 @@ module ChordsheetSongbookConverter
     end
 
     def write(song)
-      data = {
-        "chords" => {},
-        "lyrics" => []
-      }
-
-      song.stanzas.each do |stanza|
-        data["chords"][stanza.name] = nil
-        data["lyrics"] << {stanza.name => nil}
-      end
-
-      File.write(@path, data.to_yaml)
+      File.write(@path, song.to_yaml)
     end
   end
 end
