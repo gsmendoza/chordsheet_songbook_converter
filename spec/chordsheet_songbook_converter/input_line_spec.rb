@@ -52,5 +52,28 @@ RSpec.describe ChordsheetSongbookConverter::InputLine do
 
       it { is_expected.to be_truthy }
     end
+
+    context "when the line is a page line" do
+      let(:text) { "Page 1/3" }
+
+      it { is_expected.to be_falsey }
+    end
+  end
+
+  describe "#page_line?" do
+    let(:input_line) { described_class.new(text:) }
+    subject { input_line.page_line? }
+
+    context "when the line is a page line" do
+      let(:text) { "Page 1/3" }
+
+      it { is_expected.to be_truthy }
+    end
+
+    context "when the line is not a page line" do
+      let(:text) { "Not a page line" }
+
+      it { is_expected.to be_falsey }
+    end
   end
 end

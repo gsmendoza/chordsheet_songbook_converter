@@ -140,5 +140,22 @@ RSpec.describe ChordsheetSongbookConverter::Input do
         expect(song.stanzas.map(&:cleaned_name)).to eq(["Bridge", "Bridge 2", "Bridge 3"])
       end
     end
+
+    context "when the input has a stanza with a page line" do
+      let(:input_content) do
+        <<~STANZA
+          [Verse 1]
+          Page 1/3
+        STANZA
+      end
+
+      it "ignores the page line" do
+        expect(song.stanzas.size).to eq(1)
+        stanza = song.stanzas[0]
+        expect(stanza.name).to eq("[Verse 1]")
+        expect(stanza.chord_lines).to be_empty
+        expect(stanza.lyric_lines).to be_empty
+      end
+    end
   end
 end

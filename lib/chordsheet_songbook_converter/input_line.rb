@@ -18,8 +18,12 @@ module ChordsheetSongbookConverter
       end
     end
 
+    def page_line?
+      @text =~ /\APage \d+\/\d+\z/
+    end
+
     def lyric_line?
-      !@text.empty? && !stanza_header? && !chord_line?
+      !@text.empty? && !stanza_header? && !chord_line? && !page_line?
     end
   end
 end
