@@ -32,7 +32,9 @@ module ChordsheetSongbookConverter
         else
           raise MissingCurrentStanza if current_stanza.nil?
 
-          current_stanza.chord_lines << ChordLine.new(line.text)
+          if line.chord_line?
+            current_stanza.chord_lines << ChordLine.new(line.text)
+          end
         end
       end
 

@@ -66,7 +66,6 @@ RSpec.describe ChordsheetSongbookConverter::Song do
 
       it "generates a songbook with those stanzas" do
         expect(songbook["chords"].keys).to eq(["Intro", "Verse 1"])
-
         expect(songbook["lyrics"]).to eq([{"Intro" => nil}, {"Verse 1" => nil}])
       end
     end

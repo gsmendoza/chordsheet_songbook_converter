@@ -15,5 +15,13 @@ module ChordsheetSongbookConverter
       return false if stanza_header?
       !@input.seen_stanza_header?
     end
+
+    def chord_line?
+      return false if @text.empty?
+
+      @text.split.all? do |word|
+        word =~ %r{\A[A-G](#|b)?([a-zA-Z0-9])*(/[A-G](#|b)?)?\z}
+      end
+    end
   end
 end
