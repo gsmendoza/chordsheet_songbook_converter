@@ -3,11 +3,11 @@ module ChordsheetSongbookConverter
     attr_reader :text
 
     def initialize(text)
-      @text = text
+      @text = text.strip
     end
 
     def formatted_text
-      "<#{text}>"
+      @text.split.map { |chord| "<#{chord}>" }.join(" ")
     end
 
     def to_s
