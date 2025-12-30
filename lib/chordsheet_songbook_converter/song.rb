@@ -14,7 +14,7 @@ module ChordsheetSongbookConverter
       stanzas.each do |stanza|
         chord_content = nil
         if stanza.chord_lines.any?
-          chord_content = stanza.chord_lines.map { |l| l.formatted_text }.join
+          chord_content = stanza.chord_lines.map { |l| l.formatted_text }.join("\n")
         end
 
         lyric_content = nil

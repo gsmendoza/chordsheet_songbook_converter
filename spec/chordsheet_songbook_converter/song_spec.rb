@@ -52,7 +52,7 @@ RSpec.describe ChordsheetSongbookConverter::Song do
       end
 
       it "generates a songbook with those chord lines" do
-        expected_content = "<Aadd9/F#> <G6> <Dsus2> <Aadd9/F#><G6>"
+        expected_content = "<Aadd9/F#> <G6> <Dsus2> <Aadd9/F#>\n<G6>"
 
         expect(songbook["chords"]["Intro"]).to eq(expected_content)
       end
