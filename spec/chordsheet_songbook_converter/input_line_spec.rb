@@ -3,7 +3,7 @@ require "chordsheet_songbook_converter/input_line"
 
 RSpec.describe ChordsheetSongbookConverter::InputLine do
   describe "#chord_line?" do
-    let(:input_line) { described_class.new(input: nil, text:) }
+    let(:input_line) { described_class.new(text:) }
     subject { input_line.chord_line? }
 
     context "when all the words of the line look like chords" do
@@ -26,7 +26,7 @@ RSpec.describe ChordsheetSongbookConverter::InputLine do
   end
 
   describe "#lyric_line?" do
-    let(:input_line) { described_class.new(input: nil, text:) }
+    let(:input_line) { described_class.new(text:) }
     subject { input_line.lyric_line? }
 
     context "when the line is a stanza header" do
