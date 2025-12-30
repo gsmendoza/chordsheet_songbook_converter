@@ -84,22 +84,29 @@ RSpec.describe ChordsheetSongbookConverter::App do
           end
         end
 
-        #   context "when the input is a file has a single stanza with a single line" do
-        #     let(:input_content) do
-        #       <<~STANZA
-        #         Sinners - Rocky Road to Dublin
-        #         [Intro]
-        #         ...         Then off to reap the corn,
-        #       STANZA
-        #     end
+        context "when the input is a file with a single stanza with a single chord line" do
+          let(:input_content) do
+            <<~STANZA
+              &
+              [Intro]
+              Aadd9/F#
+            STANZA
+          end
 
-        #     it "generates an songbook file with a single card" do
-        #       call_app
+          it "generates an songbook file with that chord line" do
+            call_app
 
-        #       expect(File.read(output_path)).to eq(%("Sinners - Rocky Road to Dublin\n0. First Line","1. [Intro]\n1. ...         Then off to reap the corn,"\n))
-        #     end
-        #   end
-        # end
+            songbook = YAML.load_file(output_path)
+
+            expect(songbook["chords"].keys).to eq(["Intro"])
+            expect(songbook["chords"]["Intro"]).to eq("<Aadd9/F#>")
+
+            expect(songbook["lyrics"].size).to eq(1)
+            expect(songbook["lyrics"][0]).to be_a(Hash)
+            expect(songbook["lyrics"][0].keys).to eq(["Intro"])
+            expect(songbook["lyrics"][0]["Intro"]).to be_nil
+          end
+        end
 
         # context "when provided a complete song" do
         #   let(:input_content) { File.read("spec/fixtures/Jack O’Connell, Brian Dunphy & Darren Holden - Rocky Road to Dublin.txt") }
