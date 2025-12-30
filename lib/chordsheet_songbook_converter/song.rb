@@ -8,8 +8,9 @@ module ChordsheetSongbookConverter
       @stanzas = []
     end
 
-    def to_songbook_yaml
+    def to_songbook
       data = {"chords" => {}, "lyrics" => []}
+
       stanzas.each do |stanza|
         content = nil
         if stanza.chord_lines.any?
@@ -19,7 +20,8 @@ module ChordsheetSongbookConverter
         data["chords"][stanza.cleaned_name] = content
         data["lyrics"] << {stanza.cleaned_name => nil}
       end
-      data.to_yaml
+
+      data
     end
   end
 end

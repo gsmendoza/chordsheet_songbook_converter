@@ -9,7 +9,7 @@ module ChordsheetSongbookConverter
     end
 
     def write(song)
-      File.write(@path, song.to_songbook_yaml)
+      File.write(@path, song.to_songbook.to_yaml)
     end
   end
 end
