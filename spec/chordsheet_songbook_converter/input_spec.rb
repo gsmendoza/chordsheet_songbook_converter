@@ -56,5 +56,24 @@ RSpec.describe ChordsheetSongbookConverter::Input do
         expect(stanza.chord_lines[0].text).to eq("Aadd9/F#")
       end
     end
+
+    context "when the input is a file with a single stanza with multiple chord lines" do
+      let(:input_content) do
+        <<~STANZA
+          &
+          [Intro]
+          Aadd9/F# G6 Dsus2 Aadd9/F#
+          G6
+        STANZA
+      end
+
+      it "generates a song with those chord lines" do
+        expect(song.stanzas.size).to eq(1)
+        stanza = song.stanzas[0]
+        expect(stanza.name).to eq("[Intro]")
+        expect(stanza.chord_lines.size).to eq(2)
+        expect(stanza.chord_lines.map(&:text)).to eq(["Aadd9/F# G6 Dsus2 Aadd9/F#", "G6"])
+      end
+    end
   end
 end
