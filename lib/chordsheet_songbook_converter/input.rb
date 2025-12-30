@@ -1,5 +1,6 @@
 require_relative "input_line"
 require_relative "chord_line"
+require_relative "lyric_line"
 require_relative "song"
 require_relative "stanza"
 
@@ -34,6 +35,8 @@ module ChordsheetSongbookConverter
 
           if line.chord_line?
             current_stanza.chord_lines << ChordLine.new(line.text)
+          elsif line.lyric_line?
+            current_stanza.lyric_lines << LyricLine.new(line.text)
           end
         end
       end

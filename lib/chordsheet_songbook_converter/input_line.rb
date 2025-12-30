@@ -23,5 +23,9 @@ module ChordsheetSongbookConverter
         word =~ %r{\A[A-G](#|b)?([a-zA-Z0-9])*(/[A-G](#|b)?)?\z}
       end
     end
+
+    def lyric_line?
+      !@text.empty? && !stanza_header? && !chord_line?
+    end
   end
 end

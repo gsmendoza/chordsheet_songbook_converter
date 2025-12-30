@@ -24,4 +24,33 @@ RSpec.describe ChordsheetSongbookConverter::InputLine do
       it { is_expected.to be_falsey }
     end
   end
+
+  describe "#lyric_line?" do
+    let(:input_line) { described_class.new(input: nil, text:) }
+    subject { input_line.lyric_line? }
+
+    context "when the line is a stanza header" do
+      let(:text) { "[Chorus]" }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context "when the line is a chord line" do
+      let(:text) { "A B C" }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context "when the line is empty" do
+      let(:text) { "" }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context "when the line is a lyric line" do
+      let(:text) { "This is a lyric" }
+
+      it { is_expected.to be_truthy }
+    end
+  end
 end
