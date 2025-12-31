@@ -16,7 +16,7 @@ module ChordsheetSongbookConverter
           stanza.chord_lines.map { |l| l.formatted_text }.join("\n")
 
         data["lyrics"] <<
-          {stanza.cleaned_name => stanza.lyric_lines.map(&:text).join("\n")}
+          {stanza.cleaned_name => stanza.lyric_lines.map(&:formatted_text).join("\n")}
       end
 
       data

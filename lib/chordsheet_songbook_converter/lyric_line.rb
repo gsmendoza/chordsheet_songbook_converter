@@ -3,7 +3,11 @@ module ChordsheetSongbookConverter
     attr_reader :text
 
     def initialize(text)
-      @text = text.strip
+      @text = text
+    end
+
+    def formatted_text
+      text.squeeze(" ").strip
     end
   end
 end
